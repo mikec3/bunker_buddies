@@ -27,6 +27,12 @@ model User {
   createdAt   DateTime    @default(now())
 
   credentials Credential[] // Relationship: One user can have many credentials
+  answers     Answer[]      // one user has many answers
+  comments    Comments[]    // one user has many comments
+  following   Connections[] @relation("Following")
+  followedBy  Connections[] @relation("FollowedBy")
+  requester   PendingConnections[] @relation("Requester")
+  requested   PendingConnections[] @relation("Requested")
 }
 
 model Credential {
@@ -40,4 +46,51 @@ model Credential {
   
   @@index([credentialId])
   @@index([userId])
+}
+
+model Question {
+  id            String   @id @default(uuid()) // Internal DB ID
+  dateKey       DateTime @unique            // only one question per dateKey
+  question      String                      // the question to be asked each dateKey
+  answers       Answer[]                   // one question holds many answers
+}
+
+
+model Answer {
+  id            String   @id @default(uuid()) // Internal DB ID
+  userId        String   @unique // Every answer is linked to a specific user
+  user          User     @relation(fields: [userId], references: [id])
+  createdAt     DateTime @default(now())
+  answerText    String    // the answer to the question
+  dateKeyId     DateTime 
+  question      Question @relation(fields: [dateKeyId], references: [dateKey]) // connect on dateKey to questions
+  comments      Comments[]  // one post can have many comments
+}
+
+model Connections {
+  followingId   String
+  following     User    @relation("Following", fields: [followingId], references: [id])
+  followedById  String  
+  followedBy    User    @relation("FollowedBy", fields: [followedById], references: [id])
+
+  @@id([followingId, followedById])
+}
+
+model PendingConnections {
+  requesterId   String
+  requester     User    @relation("Requester", fields: [requesterId], references: [id])
+  requestedId   String
+  requested     User    @relation("Requested", fields: [requestedId], references: [id])
+
+  @@id([requesterId, requestedId])
+}
+
+model Comments {    // hold comments on answers
+  commentId     String  @id @default(uuid()) // Internal DB ID
+  commentText   String
+  answerId      String                        // id of the answer this is a comment to
+  answer        Answer  @relation(fields: [answerId], references: [id])
+  userId        String
+  user          User    @relation(fields: [userId], references: [id])
+
 }
