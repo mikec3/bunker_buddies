@@ -63,9 +63,14 @@ npm run migrate:dev "setup social models"
 ```
 npx prisma studio
 ```
+5. any seed scripts (I think) in /scripts will run during migration, call also call out
+```
+npm run seed
+```
+
 #### DB Notes
-* You can always delete the .wranger folder and re-run 'npm run migrate:dev' to regenerate.
-* # Notes
+* You can always delete the .wranger folder and re-run 'npm run migrate:dev' to regenerate. - will need to update DATABASE_URL in .env with new sqlite file location.
+
 after running npm run release I had two main issues
 local dev no longer worked due to db issues and remote db never seeded (applicationStatus empty).
 for local fix I deleted .wrangler folder and re-ran npm run dev, then updated schema.prisma file with sqlite file location.

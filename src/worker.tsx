@@ -15,6 +15,15 @@ export type AppContext = {
   user: User | null;
 };
 
+const isAuthenticated = ({ ctx }: { ctx: AppContext}) => {
+  if (!ctx.user) {
+    return new Response(null, {
+      status: 302,
+      headers: { Location: "/user/login" },
+    });
+  }
+}
+
 export default defineApp([
   setCommonHeaders(),
   async ({ ctx, request, headers }) => {
@@ -46,18 +55,11 @@ export default defineApp([
     }
   },
   render(Document, [
-    route("/", () => new Response("Hello, World!")),
-    route("/protected", [
-      ({ ctx }) => {
-        if (!ctx.user) {
-          return new Response(null, {
-            status: 302,
-            headers: { Location: "/user/login" },
-          });
-        }
-      },
-      Home,
-    ]),
+    route("/", [isAuthenticated, Home]),
     prefix("/user", userRoutes),
+    prefix("/legal", [
+      route("/privacy", () => <h1>Privacy Policy</h1>),
+      route("/terms", () => <h1>Terms of Service</h1>),
+    ]),
   ]),
 ]);

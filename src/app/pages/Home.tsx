@@ -1,4 +1,5 @@
 import { RequestInfo } from "rwsdk/worker";
+import { Feed } from "./Feed";
 
 export function Home({ ctx }: RequestInfo) {
   return (
@@ -8,6 +9,7 @@ export function Home({ ctx }: RequestInfo) {
           ? `You are logged in as user ${ctx.user.username}`
           : "You are not logged in"}
       </p>
+      <Feed/>
     </div>
   );
 }
