@@ -2,6 +2,7 @@ import { defineLinks } from "rwsdk/router";
 
 export const link = defineLinks([
   "/",
+  "/today",
   "/user/login",
   "/user/signup",
   "/user/logout",

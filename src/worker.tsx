@@ -2,6 +2,7 @@ import { defineApp, ErrorResponse } from "rwsdk/worker";
 import { route, render, prefix } from "rwsdk/router";
 import { Document } from "@/app/Document";
 import { Home } from "@/app/pages/Home";
+import { Today } from "./app/pages/Today";
 import { setCommonHeaders } from "@/app/headers";
 import { userRoutes } from "@/app/pages/user/routes";
 import { sessions, setupSessionStore } from "./session/store";
@@ -56,6 +57,7 @@ export default defineApp([
   },
   render(Document, [
     route("/", [isAuthenticated, Home]),
+    route("/today", [isAuthenticated, Today]),
     prefix("/user", userRoutes),
     prefix("/legal", [
       route("/privacy", () => <h1>Privacy Policy</h1>),

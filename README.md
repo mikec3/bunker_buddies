@@ -56,7 +56,7 @@ npx shadcn@latest add
 1. make changes to prisma/schema.prisma file
 2. CLI command migration (can tell what changed in the schema file and makes a migration)
 ```
-npm run migrate:dev "setup social models"
+npm run migrate:new "setup social models"
 ```
 3. input 'copy relative path' of .wranger/state/v3/d1/sqlite file into .env file as DATABASE_URL = "file:../.wrangler....."
 4. inspect DB with prisma

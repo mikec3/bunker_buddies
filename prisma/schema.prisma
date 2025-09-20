@@ -58,12 +58,12 @@ model Question {
 
 model Answer {
   id            String   @id @default(uuid()) // Internal DB ID
-  userId        String   @unique // Every answer is linked to a specific user
+  userId        String   // Every answer is linked to a specific user
   user          User     @relation(fields: [userId], references: [id])
   createdAt     DateTime @default(now())
   answerText    String    // the answer to the question
-  dateKeyId     DateTime 
-  question      Question @relation(fields: [dateKeyId], references: [dateKey]) // connect on dateKey to questions
+  questionId    String? 
+  question      Question? @relation(fields: [questionId], references: [id]) // connect on id to questions
   comments      Comments[]  // one post can have many comments
 }
 
@@ -88,8 +88,8 @@ model PendingConnections {
 model Comments {    // hold comments on answers
   commentId     String  @id @default(uuid()) // Internal DB ID
   commentText   String
-  answerId      String                        // id of the answer this is a comment to
-  answer        Answer  @relation(fields: [answerId], references: [id])
+  answerId      String?                        // id of the answer this is a comment to
+  answer        Answer?  @relation(fields: [answerId], references: [id])
   userId        String
   user          User    @relation(fields: [userId], references: [id])
 

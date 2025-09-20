@@ -7,8 +7,8 @@ export default defineScript(async ({ env }) => {
   // order matters, will error if you try to delete a parent relationship first.
   await db.$executeRawUnsafe(`\
     DELETE FROM Credential;
-    DELETE FROM User;
     DELETE FROM Answer;
+    DELETE FROM User;
     DELETE FROM Comments;
     DELETE FROM Connections;
     DELETE FROM PendingConnections;
