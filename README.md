@@ -125,6 +125,11 @@ Copy the database ID provided and paste it into your project's `wrangler.jsonc` 
 npm run release
 ```
 
+connected github to cloudflare worker in settings.
+Instructions say below, but I think just pushing latest branch to github should work.
+npm run build
+npx wrangler deploy
+
 # Deploy Notes
 after running npm run release I had two main issues
 local dev no longer worked due to db issues and remote db never seeded (applicationStatus empty).
