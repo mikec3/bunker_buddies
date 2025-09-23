@@ -1,6 +1,7 @@
 import { RequestInfo } from "rwsdk/worker";
 import { Feed } from "@/app/components/Feed";
 import { getQuestionsAndAnswers } from "@/app/components/functions";
+import {Header} from "@/app/components/Header";
 
 const Home = async ({ ctx }: RequestInfo) => {
 
@@ -14,14 +15,11 @@ const Home = async ({ ctx }: RequestInfo) => {
   let questionsAndAnswers = await getQuestionsAndAnswers( todayMinusXDays, startOfToday);
 
   console.log(questionsAndAnswers.data);
+  console.log('logged in as: ' + ctx.user?.username);
 
   return (
     <div>
-      <p>
-        {ctx.user?.username
-          ? `You are logged in as user ${ctx.user.username}`
-          : "You are not logged in"}
-      </p>
+      <Header/>
       <Feed questionsAndAnswers={questionsAndAnswers.data}/>
     </div>
   );

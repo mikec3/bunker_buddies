@@ -56,7 +56,7 @@ npx shadcn@latest add
 1. make changes to prisma/schema.prisma file
 2. CLI command migration (can tell what changed in the schema file and makes a migration)
 ```
-npm run migrate:new "setup social models"
+npm run migrate:new "setup social models". // npm run dev applied it, didn't reset db.
 ```
 3. input 'copy relative path' of .wranger/state/v3/d1/sqlite file into .env file as DATABASE_URL = "file:../.wrangler....."
 4. inspect DB with prisma
@@ -124,6 +124,40 @@ Copy the database ID provided and paste it into your project's `wrangler.jsonc` 
 ```
 npm run release
 ```
+
+# Deploy Notes
+after running npm run release I had two main issues
+local dev no longer worked due to db issues and remote db never seeded (applicationStatus empty).
+for local fix I deleted .wrangler folder and re-ran npm run dev, then updated schema.prisma file with sqlite file location.
+
+test with - should show you application statuses from local db
+npx wrangler d1 execute tutorial_v2-reluctant-planarian --local --command="SELECT * FROM ApplicationStatus"
+
+npx prisma studio should also show you local db again and site should work.
+
+remote db seeding issue notes
+npx wrangler d1 execute tutorial_v2-reluctant-planarian --remote --command="SELECT * FROM User"
+didn't work, can't access error. Checking id of db from error.
+RAN IT AGAIN AND IT WORKED
+try seeding with a sql script - see .src/scripts/ProdSeed.sql
+-run it using
+npx wrangler d1 execute tutorial_v2-reluctant-planarian --remote --file="./src/scripts/ProdSeed.sql"
+-Check it worked by querying
+npx wrangler d1 execute tutorial_v2-reluctant-planarian --remote --command="SELECT * FROM ApplicationStatus"
+
+## Database seed remote
+export a local table using
+```shell
+npx wrangler d1 export bunker_buddies-ok-zebra --table=Question --output=./questionData.sql --no-schema
+```
+
+import the local exported sql file into remote d1 database
+```shell
+npx wrangler d1 execute bunker_buddies-ok-zebra --remote --file="./questionData.sql"
+```
+
+
+
 
 ### Authentication Setup
 

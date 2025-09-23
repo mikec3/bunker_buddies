@@ -15,19 +15,38 @@ import { questionsAndAnswersInterface } from "@/app/components/functions";
 const Feed = ({questionsAndAnswers}: {questionsAndAnswers: questionsAndAnswersInterface}) => {
 
 // TODO - useState the questionsAndAnswers so that you can map through it
+//console.log(questionsAndAnswers);
 
   const formatDate = (dateKey: string) => {
     const date = new Date(dateKey);
     const today = new Date();
     const yesterday = new Date(today);
     yesterday.setDate(yesterday.getDate() - 1);
+
+    const qDateRaw = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(),
+                date.getUTCDate(), date.getUTCHours(),
+                date.getUTCMinutes(), date.getUTCSeconds());
     
-    if (date.toDateString() === today.toDateString()) {
+    const offset = today.getTimezoneOffset() * 60 * 1000;
+    const qDate = new Date(qDateRaw + offset);
+
+    console.log(qDate);
+
+
+
+    // console.log(qDate);
+
+    // console.log(qDateRaw);
+    //  console.log('datekey: ' + qDate.toDateString());
+    //  console.log('today: ' + today.toString());
+    // console.log(date.toUTCString())
+    // console.log(qDate.toDateString());
+    if (qDate.toDateString() === today.toDateString()) {
       return 'Today';
-    } else if (date.toDateString() === yesterday.toDateString()) {
+    } else if (qDate.toDateString() === yesterday.toDateString()) {
       return 'Yesterday';
     } else {
-      const diffTime = Math.abs(today.getTime() - date.getTime());
+      const diffTime = Math.abs(today.getTime() - qDate.getTime());
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
       return `${diffDays} days ago`;
     }
@@ -50,18 +69,6 @@ const Feed = ({questionsAndAnswers}: {questionsAndAnswers: questionsAndAnswersIn
 
   return (
   <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b border-border">
-        <div className="max-w-2xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <h1 className="text-xl font-bold">Bunker Buddies</h1>
-            <Badge variant="secondary" className="text-xs">
-              Day 127 of survival 🏃‍♀️
-            </Badge>
-          </div>
-        </div>
-      </div>
-
       {/* Feed */}
       <div className="max-w-2xl mx-auto px-4 py-6 space-y-8">
         {questionsAndAnswers.map((question) => (
