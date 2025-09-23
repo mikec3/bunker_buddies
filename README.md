@@ -126,7 +126,7 @@ npm run release
 ```
 
 connected github to cloudflare worker in settings.
-Instructions say below, but I think just pushing latest branch to github should work. - keeps failing acutally...
+Instructions say below, but I think just pushing latest branch to github should work. - keeps failing actually... ran npm install according to logs...
 npm run build
 npx wrangler deploy
 
