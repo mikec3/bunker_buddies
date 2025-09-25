@@ -209,3 +209,93 @@ export const getConnectionsAndAnswers = async (todayMinusXDays: Date, startOfTod
     return { success: false, error: error as Error };
   }
 }
+
+
+// create connection request
+export const sendConnReq = async (username: string) => {
+    try {
+     const { ctx } = requestInfo;
+     console.log(ctx.user)
+    if (!ctx.user) {
+      throw new Error("User not found");
+    }
+    // first get userIdFromUsername
+    const otherUsersId = await getUserIdFromUsername(username);
+    console.log('other users Id : ' + otherUsersId.data.id)
+
+    // now use the id to create connection request
+        await db.pendingConnections.create({
+        data: {
+            requester: {
+                connect: {
+                    id: ctx.user.id,
+                },
+            },
+            requested: {
+                connect: {
+                    id: otherUsersId.data.id,
+                },
+            }
+        }
+    })
+
+
+    return { success: true, error: null};
+    }
+   catch (error) {
+    console.error(error);
+    return { success: false, error: error as Error };
+  }
+}
+
+// get userId From Username - used for sending outbound connection requests
+const getUserIdFromUsername = async (username: string) => {
+    try {
+    //  get userIdFromUsername
+    const otherUserId = await db.user.findUnique({
+        where: {
+            username: username
+        }
+    })
+
+    return { success: true, error: null, data: otherUserId};
+    }
+   catch (error) {
+    console.error(error);
+    return { success: false, error: error as Error };
+  }
+}
+
+// interface for getQuestionsAndAnswers
+export type inboundConnReqInterface = Prisma.pendingConnectionsGetPayload<{
+  include: {
+    requester: true
+  }
+}>
+
+// get my inbound pending connection requests
+export const getInboundConnReq = async () => {
+    try {
+     const { ctx } = requestInfo;
+     console.log(ctx.user)
+    if (!ctx.user) {
+      throw new Error("User not found");
+    }
+    // get all inbound connection requests from ctx.user.id
+        const inboundConns = await db.pendingConnections.findMany({
+            where: {
+                requestedId: ctx.user.id
+            },
+            include: {
+                requester: true
+            }
+    })
+
+
+    return { success: true, error: null, data: inboundConns};
+    }
+   catch (error) {
+    console.error(error);
+    return { success: false, error: error as Error };
+  }
+}

@@ -1,6 +1,6 @@
 import { RequestInfo } from "rwsdk/worker";
 import { Feed } from "@/app/components/Feed";
-import { getQuestionsAndAnswers } from "@/app/components/functions";
+import { getQuestionsAndAnswers, getInboundConnReq } from "@/app/components/functions";
 import {Header} from "@/app/components/Header";
 
 const Home = async ({ ctx }: RequestInfo) => {
@@ -14,12 +14,15 @@ const Home = async ({ ctx }: RequestInfo) => {
 
   let questionsAndAnswers = await getQuestionsAndAnswers( todayMinusXDays, startOfToday);
 
+  let inboundConnReq = await getInboundConnReq();
+
   console.log(questionsAndAnswers.data);
   console.log('logged in as: ' + ctx.user?.username);
+  console.log('inbound Conn Requests' + JSON.stringify(inboundConnReq.data[0].requester.username));
 
   return (
     <div>
-      <Header/>
+      <Header inboundConnReq={inboundConnReq}/>
       <Feed questionsAndAnswers={questionsAndAnswers.data}/>
     </div>
   );

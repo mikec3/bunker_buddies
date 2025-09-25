@@ -127,8 +127,12 @@ npm run release
 
 connected github to cloudflare worker in settings.
 Instructions say below, but I think just pushing latest branch to github should work. - keeps failing actually... ran npm install according to logs...
+
+run these to re-deploy after making changes - will not overwrite databases
+```shell
 npm run build
 npx wrangler deploy
+```
 
 # Deploy Notes
 after running npm run release I had two main issues
