@@ -102,11 +102,11 @@ export const getQuestionsAndAnswers = async (todayMinusXDays: Date, startOfToday
                         id: ctx.user.id
                     }},
                     {user: {
-                    following: {
-                        every: {
-                            followedById: ctx.user.id
+                        followedBy: {
+                            some: {
+                                followingId: ctx.user.id
+                            }
                         }
-                    }
                 }}
             ]
             },
@@ -119,6 +119,15 @@ export const getQuestionsAndAnswers = async (todayMinusXDays: Date, startOfToday
         dateKey: 'desc'
     }
   });
+
+                //     {user: {
+                //     following: {
+                //         every: {
+                //             followedById: ctx.user.id
+                //         }
+                //     }
+                // }}
+
 
 //   const questions = await db.question.findMany({
 //     where: {
@@ -293,6 +302,156 @@ export const getInboundConnReq = async () => {
 
 
     return { success: true, error: null, data: inboundConns};
+    }
+   catch (error) {
+    console.error(error);
+    return { success: false, error: error as Error };
+  }
+}
+
+
+// interface for getQuestionsAndAnswers
+export type outboundConnReqInterface = Prisma.pendingConnectionsGetPayload<{
+  include: {
+    requested: true
+  }
+}>
+
+export const getOutboundConnReq = async () => {
+        try {
+     const { ctx } = requestInfo;
+     console.log(ctx.user)
+    if (!ctx.user) {
+      throw new Error("User not found");
+    }
+    // get all inbound connection requests from ctx.user.id
+        const outboundConns = await db.pendingConnections.findMany({
+            where: {
+                requesterId: ctx.user.id
+            },
+            include: {
+                requested: true
+            }
+    })
+
+
+    return { success: true, error: null, data: outboundConns};
+    }
+   catch (error) {
+    console.error(error);
+    return { success: false, error: error as Error };
+  }
+}
+
+export const cancelOutboundConnReq = async (requestedId: string) => {
+        try {
+     const { ctx } = requestInfo;
+     console.log(ctx.user)
+    if (!ctx.user) {
+      throw new Error("User not found");
+    }
+    // delete current user's pending connections to requestedId
+    const cancelReq = await db.pendingConnections.deleteMany({
+        where: {
+            requesterId: ctx.user.id,
+            requestedId: requestedId
+        }
+    })
+
+
+    return { success: true, error: null};
+    }
+   catch (error) {
+    console.error(error);
+    return { success: false, error: error as Error };
+  }
+}
+
+export const cancelInboundConnReq = async (requesterId: string) => {
+        try {
+     const { ctx } = requestInfo;
+     console.log(ctx.user)
+    if (!ctx.user) {
+      throw new Error("User not found");
+    }
+    // delete current user's pending connections from requesterId
+    const cancelReq = await db.pendingConnections.deleteMany({
+        where: {
+            requesterId: requesterId,
+            requestedId: ctx.user.id
+        }
+    })
+
+
+    return { success: true, error: null};
+    }
+   catch (error) {
+    console.error(error);
+    return { success: false, error: error as Error };
+  }
+}
+
+
+// interface for getQuestionsAndAnswers
+export type allConnInterface = Prisma.connectionsGetPayload<{
+  select: {
+    following: true
+  }
+}>
+
+// get all current user's connections
+export const getAllConn = async () => {
+        try {
+     const { ctx } = requestInfo;
+     console.log(ctx.user)
+    if (!ctx.user) {
+      throw new Error("User not found");
+    }
+    // get all connections from ctx.user.id
+        const conn = await db.connections.findMany({
+            where: {
+                followedById: ctx.user.id
+            },
+            select: {
+                following: true
+            }
+    })
+
+
+    return { success: true, error: null, data: conn};
+    }
+   catch (error) {
+    console.error(error);
+    return { success: false, error: error as Error };
+  }
+}
+
+
+// create connection
+export const acceptConnReq = async (requesterId: string) => {
+        try {
+     const { ctx } = requestInfo;
+     console.log(ctx.user)
+    if (!ctx.user) {
+      throw new Error("User not found");
+    }
+    // get all connections from ctx.user.id
+        const conn = await db.connections.createMany({
+        data: [
+      {followingId: requesterId
+        , followedById: ctx.user.id
+      }
+      , {followingId: ctx.user.id
+        , followedById: requesterId
+      }
+    ]
+    })
+
+    // delete the pending request
+    let pendingDeleteResult = await cancelInboundConnReq(requesterId);
+
+
+    return { success: true, error: null, data: conn};
     }
    catch (error) {
     console.error(error);

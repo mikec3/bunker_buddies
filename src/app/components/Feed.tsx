@@ -9,10 +9,18 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Heart, MessageCircle, Share } from 'lucide-react';
-import { questionsAndAnswersInterface } from "@/app/components/functions";
+import { questionsAndAnswersInterface, submitAnswer } from "@/app/components/functions";
+import { userInterface } from "./Header";
+import { Input } from "./ui/input";
+import { Send } from "lucide-react";
 
 
-const Feed = ({questionsAndAnswers}: {questionsAndAnswers: questionsAndAnswersInterface}) => {
+const Feed = ({questionsAndAnswers, user}:
+   {questionsAndAnswers: questionsAndAnswersInterface
+    , user: userInterface
+   }) => {
+
+    const [answerInputs, setAnswerInputs] = useState<Record<string, string>>({});
 
 // TODO - useState the questionsAndAnswers so that you can map through it
 //console.log(questionsAndAnswers);
@@ -66,6 +74,38 @@ const Feed = ({questionsAndAnswers}: {questionsAndAnswers: questionsAndAnswersIn
     }
   };
 
+  const handleAnswerChange = (e: React.KeyboardEvent, questionId: string, value: string) => {
+    e.preventDefault();
+    setAnswerInputs(prev => ({
+      ...prev,
+      [questionId]: value
+    }));
+  }
+
+  // handle when user answers a question
+    const handleSubmitAnswer = (questionId: string) => {
+    const answerText = answerInputs[questionId]?.trim();
+    if (!answerText || !user) return;
+
+    console.log('quetionId: ' + questionId)
+    console.log('answerText: ' + answerText)
+
+    submitAnswer(answerText, questionId);
+  };
+
+  const hasUserAnswered = (questionId: string) => {
+    let answeredFlag = false;
+    let getQuestion = questionsAndAnswers.filter(question => question.id === questionId);
+    let getAnswer = getQuestion[0].answers?.filter(answer => answer.userId === user.id);
+    console.log(getQuestion);
+    console.log(getAnswer);
+    if (getAnswer.length > 0) {
+      answeredFlag = true;
+    }
+
+    return answeredFlag;
+
+  }
 
   return (
   <div className="min-h-screen bg-background">
@@ -112,7 +152,9 @@ const Feed = ({questionsAndAnswers}: {questionsAndAnswers: questionsAndAnswersIn
                         </div>
                         
                         <p className="text-base leading-relaxed bg-muted/30 p-4 rounded-lg">
-                          {answer.answerText}
+                          {hasUserAnswered(question.id) ? (answer.answerText)
+                          : "Submit your answer to this question to see your bunker buddie's response"
+                          }
                         </p>
                         
                         <div className="flex items-center space-x-6 pt-2">
@@ -154,11 +196,24 @@ const Feed = ({questionsAndAnswers}: {questionsAndAnswers: questionsAndAnswersIn
               <div className="pt-6 border-t-2 border-border/50">
                 <div className="flex items-start space-x-3">
                   <Avatar className="w-10 h-10">
-                    <AvatarFallback className="text-sm font-medium">Y</AvatarFallback>
+                    <AvatarFallback className="text-sm font-medium">
+                      {user ? user.username.charAt(0).toUpperCase() : 'Y'}
+                    </AvatarFallback>
                   </Avatar>
-                  <div className="flex-1">
-                    <Button variant="outline" className="h-12 w-full justify-start text-base text-muted-foreground border-2 border-dashed hover:border-solid hover:bg-accent/50">
-                      💭 Share your survival wisdom...
+                  <div className="flex-1 flex space-x-2">
+                    <Input
+                      value={answerInputs[question.id] || ''}
+                      onChange={(e) => handleAnswerChange(e, question.id, e.target.value)}
+                      placeholder="💭 Share your survival wisdom..."
+                      className="flex-1 h-12 border-2 border-dashed focus:border-solid"
+                    />
+                    <Button
+                      onClick={() => handleSubmitAnswer(question.id)}
+                      disabled={!answerInputs[question.id]?.trim()}
+                      size="icon"
+                      className="h-12 w-12 shrink-0"
+                    >
+                      <Send className="w-4 h-4" />
                     </Button>
                   </div>
                 </div>
