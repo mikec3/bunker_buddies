@@ -129,6 +129,11 @@ const Feed = ({questionsAndAnswers, user}:
             
             <CardContent className="space-y-6 pt-6">
               {question.answers.length > 0 ? (
+                hasUserAnswered(question.id) ? 
+                  (<div className="text-center py-8 text-muted-foreground">
+                    <p className="text-lg font-medium text-lime-600"> ** Answer to see what others have said! **</p>
+                  </div>)
+                :
                 question.answers.map((answer) => (
                   <div key={answer.id} className="space-y-3">
                     <div className="flex items-start space-x-3">
@@ -152,9 +157,7 @@ const Feed = ({questionsAndAnswers, user}:
                         </div>
                         
                         <p className="text-base leading-relaxed bg-muted/30 p-4 rounded-lg">
-                          {hasUserAnswered(question.id) ? (answer.answerText)
-                          : "Submit your answer to this question to see your bunker buddie's response"
-                          }
+                        {answer.answerText}
                         </p>
                         
                         <div className="flex items-center space-x-6 pt-2">
@@ -188,7 +191,6 @@ const Feed = ({questionsAndAnswers, user}:
               ) : (
                 <div className="text-center py-8 text-muted-foreground">
                   <p className="text-base">No bunker buddies have answered yet!</p>
-                  <p className="text-sm mt-2">Be the first to share your survival wisdom 🧠</p>
                 </div>
               )}
               
