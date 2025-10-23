@@ -129,7 +129,7 @@ const Feed = ({questionsAndAnswers, user}:
             
             <CardContent className="space-y-6 pt-6">
               {question.answers.length > 0 ? (
-                hasUserAnswered(question.id) ? 
+                !hasUserAnswered(question.id) ? 
                   (<div className="text-center py-8 text-muted-foreground">
                     <p className="text-lg font-medium text-lime-600"> ** Answer to see what others have said! **</p>
                   </div>)

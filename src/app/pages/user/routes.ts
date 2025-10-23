@@ -9,7 +9,7 @@ export const userRoutes = [
   route("/logout", async function ({ request }) {
     const headers = new Headers();
     await sessions.remove(request, headers);
-    headers.set("Location", "/");
+    headers.set("Location", "/user/login");
 
     return new Response(null, {
       status: 302,
