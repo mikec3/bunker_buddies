@@ -224,12 +224,13 @@ const Feed = ({questionsAndAnswers, user}:
           </Card>
         ))}
         
-        {/* Load more placeholder */}
+        {/* Load more placeholder */ /*
         <div className="text-center py-8">
           <Button variant="outline" className="text-sm">
             Load more survival discussions 📜
           </Button>
         </div>
+        */}
       </div>
     </div>
   )
