@@ -23,7 +23,7 @@ const Feed = ({questionsAndAnswers, user}:
     const [answerInputs, setAnswerInputs] = useState<Record<string, string>>({});
 
 // TODO - useState the questionsAndAnswers so that you can map through it
-//console.log(questionsAndAnswers);
+console.log(questionsAndAnswers);
 
   const formatDate = (dateKey: string) => {
     const date = new Date(dateKey);

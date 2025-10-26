@@ -3,6 +3,7 @@ import { route, render, prefix } from "rwsdk/router";
 import { Document } from "@/app/Document";
 import { Home } from "@/app/pages/Home";
 import { Today } from "./app/pages/Today";
+import { PublicFeed } from "@/app/pages/PublicFeed";
 import { setCommonHeaders } from "@/app/headers";
 import { userRoutes } from "@/app/pages/user/routes";
 import { sessions, setupSessionStore } from "./session/store";
@@ -56,7 +57,8 @@ export default defineApp([
     }
   },
   render(Document, [
-    route("/", [isAuthenticated, Home]),
+    route("/", [PublicFeed]),
+    route("/feed", [isAuthenticated, Home]),
     route("/today", [isAuthenticated, Today]),
     prefix("/user", userRoutes),
     prefix("/legal", [

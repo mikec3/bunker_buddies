@@ -22,7 +22,7 @@ export function AnswerInput({questionId}:{questionId:string}) {
     //console.log(response);
     if (response.success == true){
         // answer submitted successfully, handle next steps here.
-        window.location.href = link("/");
+        window.location.href = link("/feed");
 
     } else {
         console.log('handle error in answer submission!!!');

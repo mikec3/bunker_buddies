@@ -147,7 +147,7 @@ const Header = ({inboundConnReq
           </div>
         </div>
       </div>
-      <AddBuddySheet
+     {user && <AddBuddySheet
         isOpen={isAddBuddyOpen}
         onOpenChange={setIsAddBuddyOpen}
         connectionRequests={inboundConnReq}
@@ -158,6 +158,7 @@ const Header = ({inboundConnReq
         onCancelOutboundRequest={handleCancelOutboundRequest}
         allConn={allConn}
       />
+     }
     </div>
   );
 }

@@ -163,6 +163,44 @@ export const getQuestionsAndAnswers = async (todayMinusXDays: Date, startOfToday
   }
 }
 
+
+
+// interface for public questions for public feed
+export type publicQuestionsInterface = Prisma.QuestionsGetPayload<{
+  include: {
+    answers: true
+  }
+}>
+
+// get last x days of questions - no answers shown - for public feed
+export const getPublicQuestions = async (todayMinusXDays: Date, startOfToday: Date) => {
+    try {
+        console.log(todayMinusXDays);
+        console.log(startOfToday);
+
+  const questions = await db.question.findMany({
+    where: {
+        dateKey: {
+            gte: todayMinusXDays,
+            lte: startOfToday
+        }
+    },
+    include: {
+        answers: true
+    },
+    orderBy: {
+        dateKey: 'desc'
+    }
+  });
+
+  return { success: true, error: null, data: questions };
+    }
+   catch (error) {
+    console.error(error);
+    return { success: false, error: error as Error };
+  }
+}
+
 // get mine and connections and their responses.
 export const getConnectionsAndAnswers = async (todayMinusXDays: Date, startOfToday: Date) => {
     try {

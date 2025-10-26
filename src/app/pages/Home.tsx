@@ -31,8 +31,9 @@ const Home = async ({ ctx }: RequestInfo) => {
               user={ctx.user}
               allConn={allConn.data} 
       />
-      <Feed questionsAndAnswers={questionsAndAnswers.data}
+     { <Feed questionsAndAnswers={questionsAndAnswers.data}
             user = {ctx.user}/>
+            }
     </div>
   );
 }
