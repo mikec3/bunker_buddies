@@ -40,22 +40,14 @@ console.log(questionsAndAnswers);
 
     console.log(qDate);
 
-
-
-    // console.log(qDate);
-
-    // console.log(qDateRaw);
-    //  console.log('datekey: ' + qDate.toDateString());
-    //  console.log('today: ' + today.toString());
-    // console.log(date.toUTCString())
-    // console.log(qDate.toDateString());
     if (qDate.toDateString() === today.toDateString()) {
       return 'Today';
     } else if (qDate.toDateString() === yesterday.toDateString()) {
       return 'Yesterday';
     } else {
       const diffTime = Math.abs(today.getTime() - qDate.getTime());
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      diffDays--;
       return `${diffDays} days ago`;
     }
   };

@@ -44,7 +44,8 @@ const PublicFeed = async ({ ctx }: RequestInfo) => {
       return 'Yesterday';
     } else {
       const diffTime = Math.abs(today.getTime() - qDate.getTime());
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      diffDays--;
       return `${diffDays} days ago`;
     }
   };
@@ -77,14 +78,14 @@ const PublicFeed = async ({ ctx }: RequestInfo) => {
       </div>
     </div>
     {publicQuestions.data?.map((question) => (
-            <Card key={question.id} className="w-full border-2">
+            <Card key={question.id} className="w-full border-2 mb-2">
             <CardHeader className="pb-6 bg-gradient-to-r from-accent/50 to-secondary/30">
               <div className="flex items-center justify-between mb-4">
                 <Badge variant="outline" className="text-xs font-medium">
                   {formatDate(question.dateKey)}
                 </Badge>
                 <Badge variant="secondary" className="text-xs">
-                  Daily Question
+                 Join to answer with buddies
                 </Badge>
               </div>
               <CardTitle className="text-2xl sm:text-3xl leading-tight font-bold text-center py-6">
