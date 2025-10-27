@@ -6,44 +6,27 @@ export default defineScript(async ({ env }) => {
 
   await db.question.createMany({
     data: [
-      {dateKey: new Date("2025-10-15")
-        , question: "Oct 15 question"
-      }
-                  , {dateKey: new Date("2025-10-16")
-        , question: "Oct 16 question"
-      }
-                        , {dateKey: new Date("2025-10-17")
-        , question: "Oct 17 question"
-      }
-                        , {dateKey: new Date("2025-10-18")
-        , question: "Oct 18 question"
-      }
-                        , {dateKey: new Date("2025-10-19")
-        , question: "Oct 19 question"
-      }
-                        , {dateKey: new Date("2025-10-20")
-        , question: "Oct 20 question"
-      }
-                        , {dateKey: new Date("2025-10-21")
-        , question: "Oct 21 question"
-      }
-                        , {dateKey: new Date("2025-10-22")
-        , question: "Oct 22 question"
-      }
-                        , {dateKey: new Date("2025-10-23")
-        , question: "Oct 23 question"
-      }
-                        , {dateKey: new Date("2025-10-24")
-        , question: "Oct 24 question"
+
+     {dateKey: new Date("2025-10-24")
+        , question: "Which Halloween costume do you hate to see and why?"
       }
                         , {dateKey: new Date("2025-10-25")
-        , question: "Oct 25 question"
+        , question: "What have you said on the internet that would get you fired today?"
       }
                         , {dateKey: new Date("2025-10-26")
-        , question: "Oct 26 question"
+        , question: "How much more money do you need to be happy?"
       }
                         , {dateKey: new Date("2025-10-27")
-        , question: "Oct 27 question"
+        , question: "If someone leaves a bowl of candy out on Halloween, do you take more than 1?"
+      }
+                        , {dateKey: new Date("2025-10-28")
+        , question: "If you had to drop a million in one day, where you going?"
+      }
+                        , {dateKey: new Date("2025-10-29")
+        , question: "Who would you murder if you could get away with it?"
+      }
+                        , {dateKey: new Date("2025-10-30")
+        , question: "Who do you owe a phone call to?"
       }
     ],
   })
