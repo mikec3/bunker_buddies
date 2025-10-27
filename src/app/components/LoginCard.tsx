@@ -70,7 +70,7 @@ export function LoginCard({ questionText }: { questionText: String}) {
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* Prominent witty question */}
             <div className="text-center py-8">
-              <p className="text-9xl sm:text-3xl font-bold text-foreground leading-relaxed">
+              <p className=" sm:text-3xl font-bold text-foreground leading-relaxed">
                 {questionText}
               </p>
             </div>
