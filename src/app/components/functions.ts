@@ -4,6 +4,57 @@ import { start } from "repl";
 import { requestInfo } from "rwsdk/worker";
 import { Prisma } from "@prisma/client";
 
+export const onAddIceBreaker = async (question: string) => {
+    try {
+     const { ctx } = requestInfo;
+     console.log(ctx.user)
+    if (!ctx.user) {
+      throw new Error("User not found");
+    }
+
+    await db.iceBreakers.create({
+        data: {
+            author: {
+                connect: {
+                    id: ctx.user.id,
+                },
+            },
+            iceBreaker: question,
+        }
+    })
+
+  return { success: true, error: null };
+    }
+   catch (error) {
+    console.error(error);
+    return { success: false, error: error as Error };
+  }
+}
+
+// interface for getQuestionsAndAnswers
+export type iceBreakersInterface = Prisma.IceBreakersGetPayload<{
+  include: {
+    author: true
+  }
+}>
+
+export const getIceBreakers = async () => {
+    try {
+  // currently gets last 5 days of questions and only current user's answers
+  const questions = await db.iceBreakers.findMany({
+    include: {
+        author: true
+    }
+  });
+
+  return { success: true, error: null, data: questions };
+    }
+   catch (error) {
+    console.error(error);
+    return { success: false, error: error as Error };
+  }
+}
+
 export const submitAnswer = async (answer: string, questionId: string) => {
 try {
      const { ctx } = requestInfo;

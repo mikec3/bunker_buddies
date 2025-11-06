@@ -33,6 +33,7 @@ model User {
   followedBy  Connections[] @relation("FollowedBy")
   requester   PendingConnections[] @relation("Requester")
   requested   PendingConnections[] @relation("Requested")
+  iceBreakers IceBreakers[] // one user can author many icebreakers
 }
 
 model Credential {
@@ -93,4 +94,12 @@ model Comments {    // hold comments on answers
   userId        String
   user          User    @relation(fields: [userId], references: [id])
 
+}
+
+model IceBreakers {
+  id            String @id @default(uuid()) // Internal DB ID Unique to each IceBreaker
+  iceBreaker    String 
+  authorId      String
+  author        User    @relation(fields: [authorId], references: [id])
+  createdAt     DateTime @default(now())
 }

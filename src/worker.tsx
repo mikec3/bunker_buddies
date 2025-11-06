@@ -4,6 +4,7 @@ import { Document } from "@/app/Document";
 import { Home } from "@/app/pages/Home";
 import { Today } from "./app/pages/Today";
 import { PublicFeed } from "@/app/pages/PublicFeed";
+import { IceBreakers } from "@/app/pages/IceBreakers";
 import { setCommonHeaders } from "@/app/headers";
 import { userRoutes } from "@/app/pages/user/routes";
 import { sessions, setupSessionStore } from "./session/store";
@@ -58,6 +59,7 @@ export default defineApp([
   },
   render(Document, [
     route("/", [PublicFeed]),
+    route("/IceBreakers", [IceBreakers]),
     route("/feed", [isAuthenticated, Home]),
     route("/today", [isAuthenticated, Today]),
     prefix("/user", userRoutes),
