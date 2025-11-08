@@ -5,28 +5,28 @@ import { useState } from "react";
 import { AddIceBreaker } from "@/app/components/AddIceBreaker";
 import { getIceBreakers } from "@/app/components/functions";
 import { IceBreakerCard } from "@/app/components/IceBreakerCard";
+import {link} from "@/app/shared/links"
+import { IceBreakerHeader } from "@/app/components/iceBreakerHeader";
 
 
 const IceBreakers = async ({ ctx }: RequestInfo) => {
 
     let iceBreakers = await getIceBreakers();
+    let loggedIn = false;
     console.log(iceBreakers);
+    let userId = '';
+    
+    if (ctx.user){
+        console.log('user is logged in')
+        userId = ctx.user.id
+        loggedIn = true;
+    }
+    
 
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-background border-b">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <h1>Ice Breaker Questions</h1>
-          <Button
-            variant="outline"
-            size="sm"
-            
-          >
-            {ctx.user ? "Log Out" : "Log In"}
-          </Button>
-        </div>
-      </header>
+      <IceBreakerHeader loggedIn={loggedIn}/>
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-6 max-w-2xl">
@@ -38,14 +38,14 @@ const IceBreakers = async ({ ctx }: RequestInfo) => {
               iceBreaker={item.iceBreaker}
               authorName={item.author.username}
               authorId={item.authorId}
-              currentUserId={ctx.user.id}
+              currentUserId={userId}
             />
           ))}
         </div>
       </main>
 
       {/* Add Question Button (only when logged in) */}
-      {ctx.user && <AddIceBreaker/>}
+      {loggedIn && <AddIceBreaker/>}
     </div>
   );
 }
