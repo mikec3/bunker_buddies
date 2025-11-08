@@ -55,6 +55,29 @@ export const getIceBreakers = async () => {
   }
 }
 
+// delete ice breaker
+export const deleteIceBreaker = async (iceBreakerId: string) => {
+    try {
+     const { ctx } = requestInfo;
+     console.log(ctx.user)
+    if (!ctx.user) {
+      throw new Error("User not found");
+    }
+
+    await db.iceBreakers.delete({
+        where: {
+            id: iceBreakerId
+        }
+    })
+
+  return { success: true, error: null };
+    }
+   catch (error) {
+    console.error(error);
+    return { success: false, error: error as Error };
+  }
+}
+
 export const submitAnswer = async (answer: string, questionId: string) => {
 try {
      const { ctx } = requestInfo;

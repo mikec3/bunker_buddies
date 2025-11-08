@@ -34,8 +34,11 @@ const IceBreakers = async ({ ctx }: RequestInfo) => {
           {iceBreakers.data.map((item) => (
             <IceBreakerCard
               key={item.id}
+              iceBreakerId={item.id}
               iceBreaker={item.iceBreaker}
               authorName={item.author.username}
+              authorId={item.authorId}
+              currentUserId={ctx.user.id}
             />
           ))}
         </div>
