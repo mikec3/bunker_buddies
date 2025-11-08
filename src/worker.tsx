@@ -58,7 +58,8 @@ export default defineApp([
     }
   },
   render(Document, [
-    route("/", [PublicFeed]),
+    route("/",[IceBreakers]),
+    route("/PublicFeed", [PublicFeed]),
     route("/IceBreakers", [IceBreakers]),
     route("/feed", [isAuthenticated, Home]),
     route("/today", [isAuthenticated, Today]),

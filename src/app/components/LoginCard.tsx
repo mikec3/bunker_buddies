@@ -27,7 +27,7 @@ export function LoginCard({ questionText }: { questionText: String}) {
     if (!success) {
       setResult("Login failed");
     } else {
-      window.location.href = link("/feed");
+      window.location.href = link("/");
     }
   };
 
