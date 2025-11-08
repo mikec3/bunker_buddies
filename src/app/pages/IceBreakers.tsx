@@ -4,6 +4,7 @@ import { Button } from '@/app/components/ui/button';
 import { useState } from "react";
 import { AddIceBreaker } from "@/app/components/AddIceBreaker";
 import { getIceBreakers } from "@/app/components/functions";
+import { IceBreakerCard } from "@/app/components/IceBreakerCard";
 
 
 const IceBreakers = async ({ ctx }: RequestInfo) => {
@@ -30,7 +31,13 @@ const IceBreakers = async ({ ctx }: RequestInfo) => {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-6 max-w-2xl">
         <div className="flex flex-col items-center gap-4">
-
+          {iceBreakers.data.map((item) => (
+            <IceBreakerCard
+              key={item.id}
+              iceBreaker={item.iceBreaker}
+              authorName={item.author.username}
+            />
+          ))}
         </div>
       </main>
 
