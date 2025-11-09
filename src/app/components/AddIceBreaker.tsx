@@ -8,7 +8,7 @@ import { Plus } from "lucide-react";
 import {onAddIceBreaker} from '@/app/components/functions';
 
 
-const AddIceBreaker = () => {
+const AddIceBreaker = ({loggedIn}: {loggedIn: boolean}) => {
   const [open, setOpen] = useState(false);
   const [question, setQuestion] = useState("");
 
@@ -29,6 +29,8 @@ const AddIceBreaker = () => {
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
+        {loggedIn ? (
+            <>
         <DialogHeader>
           <DialogTitle>Add Ice Breaker Question</DialogTitle>
         </DialogHeader>
@@ -48,6 +50,14 @@ const AddIceBreaker = () => {
             Add Question
           </Button>
         </form>
+        </>
+        ) : (
+            <>
+            <DialogHeader>
+                Login or signup to add Ice Breakers!
+            </DialogHeader>
+            </>
+        )}
       </DialogContent>
     </Dialog>
   );

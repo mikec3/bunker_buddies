@@ -45,7 +45,7 @@ const IceBreakers = async ({ ctx }: RequestInfo) => {
       </main>
 
       {/* Add Question Button (only when logged in) */}
-      {loggedIn && <AddIceBreaker/>}
+      <AddIceBreaker loggedIn={loggedIn}/>
     </div>
   );
 }
