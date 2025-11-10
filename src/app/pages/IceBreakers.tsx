@@ -14,6 +14,7 @@ const IceBreakers = async ({ ctx }: RequestInfo) => {
     let iceBreakers = await getIceBreakers();
     let loggedIn = false;
     console.log(iceBreakers);
+    console.log(iceBreakers.data[0].comments);
     let userId = '';
     
     if (ctx.user){
@@ -39,6 +40,7 @@ const IceBreakers = async ({ ctx }: RequestInfo) => {
               authorName={item.author.username}
               authorId={item.authorId}
               currentUserId={userId}
+              comments={item.comments}
               upVotes={item.upVotes}
               downVotes={item.downVotes}
               netVotes={item.netVotes}

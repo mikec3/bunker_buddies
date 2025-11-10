@@ -1,9 +1,10 @@
 'use client'
 import { Card, CardContent } from "@/app/components/ui/card";
 import { Button } from "@/app/components/ui/button";
-import {deleteIceBreaker, upVoteIceBreaker, downVoteIceBreaker} from '@/app/components/functions';
+import {deleteIceBreaker, upVoteIceBreaker, downVoteIceBreaker, addIceBreakerComment} from '@/app/components/functions';
 import { ThumbsUp, ThumbsDown } from "lucide-react";
 import { Badge } from "@/app/components/ui/badge";
+import { CommentSection } from "@/app/components/CommentSection";
 
 interface IceBreakerCardProps {
   iceBreakerId: string;
@@ -14,12 +15,28 @@ interface IceBreakerCardProps {
   upVotes: number;
   downVotes: number;
   netVotes: number;
+  comments: Comment[];
 }
 
-export function IceBreakerCard({ iceBreakerId, iceBreaker, authorName, authorId, currentUserId, upVotes, downVotes, netVotes }: IceBreakerCardProps) {
+export function IceBreakerCard({ iceBreakerId, iceBreaker, authorName, authorId, currentUserId, upVotes, downVotes, netVotes, comments }: IceBreakerCardProps) {
     let userIsAuthor = false;
+    let isLoggedIn = false
     if (authorId == currentUserId) {
         userIsAuthor = true;
+    }
+
+    if (currentUserId) {
+        isLoggedIn = true;
+    }
+
+    const onAddComment = (commentText: string) => {
+        if (isLoggedIn){
+        console.log('comment added attempt')
+        addIceBreakerComment(commentText, iceBreakerId);
+        }
+            else {
+                alert('log in to comment');
+        }
     }
 
     const deleteQuestion = () => {
@@ -85,6 +102,13 @@ export function IceBreakerCard({ iceBreakerId, iceBreaker, authorName, authorId,
                 </Button>
             </div>
         )}
+
+        {/* Comments Section */}
+        <CommentSection 
+          comments={comments} 
+          onAddComment={onAddComment}
+          isLoggedIn={isLoggedIn}
+        />
       </CardContent>
     </Card>
   );

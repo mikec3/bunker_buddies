@@ -34,7 +34,12 @@ export const onAddIceBreaker = async (question: string) => {
 // interface for getQuestionsAndAnswers
 export type iceBreakersInterface = Prisma.IceBreakersGetPayload<{
   include: {
-    author: true
+    author: true,
+    comments: {
+        include: {
+            author: true
+        }
+    }
   }
 }>
 
@@ -43,7 +48,12 @@ export const getIceBreakers = async () => {
   // currently gets last 5 days of questions and only current user's answers
   const questions = await db.iceBreakers.findMany({
     include: {
-        author: true
+        author: true,
+        comments: {
+            include: {
+                author: true
+            }
+        }
     },
     orderBy: {
         netVotes: 'desc'
@@ -129,6 +139,38 @@ export const downVoteIceBreaker = async (iceBreakerId: string) => {
             },
             netVotes: {
                 increment: -1
+            }
+        }
+    })
+
+  return { success: true, error: null };
+    }
+   catch (error) {
+    console.error(error);
+    return { success: false, error: error as Error };
+  }
+}
+
+export const addIceBreakerComment = async (commentText: string, iceBreakerId: string) => {
+        try {
+     const { ctx } = requestInfo;
+     console.log(ctx.user)
+    if (!ctx.user) {
+      throw new Error("User not found");
+    }
+
+    await db.iceBreakerComments.create({
+        data: {
+            commentText: commentText,
+            author: {
+                connect: {
+                    id: ctx.user.id,
+                },
+            },
+            iceBreaker: {
+                connect: {
+                    id: iceBreakerId
+                }
             }
         }
     })

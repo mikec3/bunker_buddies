@@ -34,6 +34,7 @@ model User {
   requester   PendingConnections[] @relation("Requester")
   requested   PendingConnections[] @relation("Requested")
   iceBreakers IceBreakers[] // one user can author many icebreakers
+  iceBreakerComments  IceBreakerComments[]    // one use can have many iceBreakerComments
 }
 
 model Credential {
@@ -102,7 +103,20 @@ model IceBreakers {
   authorId      String
   author        User    @relation(fields: [authorId], references: [id])
   createdAt     DateTime @default(now())
+  comments      IceBreakerComments[] // one IceBreaker can have many comments
   upVotes       Int     @default(0)  // all icebreakers are made with 0 upvotes at creation
+  downVotes     Int     @default(0)
+  netVotes      Int     @default(0)
+}
+
+model IceBreakerComments {
+  commentId     String @id @default(uuid()) // auto unique id
+  commentText   String
+  iceBreakerId  String                      // id of the IceBreaker question this is a response to
+  iceBreaker    IceBreakers @relation(fields: [iceBreakerId], references: [id])
+  authorId      String
+  author        User        @relation(fields: [authorId], references: [id])
+  upVotes       Int     @default(0)
   downVotes     Int     @default(0)
   netVotes      Int     @default(0)
 }
