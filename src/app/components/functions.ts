@@ -44,6 +44,9 @@ export const getIceBreakers = async () => {
   const questions = await db.iceBreakers.findMany({
     include: {
         author: true
+    },
+    orderBy: {
+        netVotes: 'desc'
     }
   });
 
@@ -67,6 +70,66 @@ export const deleteIceBreaker = async (iceBreakerId: string) => {
     await db.iceBreakers.delete({
         where: {
             id: iceBreakerId
+        }
+    })
+
+  return { success: true, error: null };
+    }
+   catch (error) {
+    console.error(error);
+    return { success: false, error: error as Error };
+  }
+}
+
+export const upVoteIceBreaker = async (iceBreakerId: string) => {
+    try {
+     const { ctx } = requestInfo;
+     console.log(ctx.user)
+    if (!ctx.user) {
+      throw new Error("User not found");
+    }
+
+    await db.iceBreakers.update({
+        where: {
+            id: iceBreakerId
+        },
+        data: {
+            upVotes: {
+                increment: 1
+            },
+            netVotes: {
+                increment: 1
+            }
+        }
+    })
+
+  return { success: true, error: null };
+    }
+   catch (error) {
+    console.error(error);
+    return { success: false, error: error as Error };
+  }
+}
+
+export const downVoteIceBreaker = async (iceBreakerId: string) => {
+    try {
+     const { ctx } = requestInfo;
+     console.log(ctx.user)
+    if (!ctx.user) {
+      throw new Error("User not found");
+    }
+
+    await db.iceBreakers.update({
+        where: {
+            id: iceBreakerId
+        },
+        data: {
+            downVotes: {
+                increment: -1
+            },
+            netVotes: {
+                increment: -1
+            }
         }
     })
 

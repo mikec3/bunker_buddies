@@ -39,6 +39,9 @@ const IceBreakers = async ({ ctx }: RequestInfo) => {
               authorName={item.author.username}
               authorId={item.authorId}
               currentUserId={userId}
+              upVotes={item.upVotes}
+              downVotes={item.downVotes}
+              netVotes={item.netVotes}
             />
           ))}
         </div>

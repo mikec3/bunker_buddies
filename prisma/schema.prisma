@@ -102,4 +102,7 @@ model IceBreakers {
   authorId      String
   author        User    @relation(fields: [authorId], references: [id])
   createdAt     DateTime @default(now())
+  upVotes       Int     @default(0)  // all icebreakers are made with 0 upvotes at creation
+  downVotes     Int     @default(0)
+  netVotes      Int     @default(0)
 }
